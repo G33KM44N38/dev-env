@@ -4,6 +4,8 @@
   tasks:
 
   - name: installing requirement tools linux
+    tags:
+      - neovim
     become: yes
     vars:
       macos_dependencies:
@@ -29,6 +31,8 @@
     when: ansible_distribution == 'Ubuntu' or ansible_distribution == 'Debian'
 
   - name: installing tools for macos
+    tags:
+      - neovim
     become: yes
     vars:
       homebrew_packages:
