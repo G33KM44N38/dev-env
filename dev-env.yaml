@@ -47,7 +47,6 @@
     when: ansible_distribution == 'MacOSX' and ansible_distribution_version.major >= 10
 
 
-  - name: installing packer
   - name: installing fish
     ansible.builtin.git:
       repo: 'https://github.com/fish-shell/fish-shell.git'
