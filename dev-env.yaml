@@ -68,7 +68,7 @@
   - name: installing neovim
     ansible.builtin.git:
       repo: 'https://github.com/neovim/neovim'
-      dest: "~/"
+      dest: "~/neovim"
     tags:
       - neovim
 
