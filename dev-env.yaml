@@ -38,7 +38,6 @@
         - pkg-config
         - gettext
         - curl
-        - neovim
         - brew
         - curl-ca-bundle  # Only needed for older macOS versions
     homebrew:
@@ -70,10 +69,14 @@
     ansible.builtin.git:
       repo: 'https://github.com/neovim/neovim'
       dest: "~/"
+    tags:
+      - neovim
 
   - name: building neovim
     shell: >
       cd ~/neovim && git checkout stable && make CMAKE_BUILD_TYPE=RelWithDebInfo && sudo make install && cd ~/ && rm -rf neovim/
+    tags:
+      - neovim
 
   - name: installing tmux if macos
     shell: >
