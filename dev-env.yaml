@@ -47,7 +47,6 @@
     when: ansible_distribution == 'MacOSX' and ansible_distribution_version.major >= 10
 
   - name: Install Rust and Rustc
-    hosts: all
     tasks:
       - name: Download Rust installer
         get_url:
