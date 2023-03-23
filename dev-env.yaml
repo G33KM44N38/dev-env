@@ -6,6 +6,7 @@
   - name: installing requirement tools linux
     tags:
       - neovim
+      - fish
     become: yes
     vars:
       macos_dependencies:
@@ -15,6 +16,7 @@
         - pkg-config
         - gettext
         - curl
+        - python3-pip
         - curl-ca-bundle  # Only needed for older macOS versions
       ubuntu_dependencies:
         - ninja-build
@@ -25,6 +27,7 @@
         - pkg-config
         - unzip
         - curl
+        - python3-pip
     apt:
       name: "{{ ubuntu_dependencies }}"
       state: present
@@ -43,6 +46,7 @@
         - gettext
         - curl
         - brew
+        - python3-pip
         - curl-ca-bundle  # Only needed for older macOS versions
     homebrew:
       name: "{{ homebrew_packages }}"
@@ -71,8 +75,8 @@
       update: yes
       version: main
       tags:
-        - dotfiles
         - neovim
+        - dotfiles
 
   - name: cloning neovim
     ansible.builtin.git:
@@ -88,7 +92,8 @@
 
   - name: building neovim
     shell: >
-      cd ~/neovim && git checkout stable && make CMAKE_BUILD_TYPE=RelWithDebInfo && sudo make install && cd ~/ && rm -rf neovim/
+      cd ~/neovim && git checkout stable && make CMAKE_BUILD_TYPE=RelWithDebInfo && sudo make install && cd ~/ && rm -rf neovim \
+      pip3 install pynvim
     tags:
       - neovim
 
