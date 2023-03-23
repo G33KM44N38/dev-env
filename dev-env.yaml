@@ -65,7 +65,7 @@
       dest: "~/.config"
       recursive: yes
       update: yes
-      version: master
+      version: main
       tags:
         - dotfiles
         - neovim
