@@ -1,0 +1,78 @@
+---
+- name: My dev setup
+  hosts: localhost
+  tasks:
+
+  - name: installing requirement tools
+    become: yes
+    vars:
+      macos_dependencies:
+        - ninja
+        - libtool
+        - cmake
+        - pkg-config
+        - gettext
+        - curl
+        - curl-ca-bundle  # Only needed for older macOS versions
+      ubuntu_dependencies:
+        - ninja-build
+        - gettext
+        - libtool-bin
+        - cmake
+        - g++
+        - pkg-config
+        - unzip
+        - curl
+    apt:
+      name: "{{ ubuntu_dependencies }}"
+      state: present
+    when: ansible_distribution == 'Ubuntu' or ansible_distribution == 'Debian'
+
+  - name: installing tools for macos
+    become: yes
+    vars:
+      homebrew_packages:
+        - ninja
+        - libtool
+        - cmake
+        - pkg-config
+        - gettext
+        - curl
+        - neovim
+        - brew
+        - curl-ca-bundle  # Only needed for older macOS versions
+    homebrew:
+      name: "{{ homebrew_packages }}"
+      state: present
+    when: ansible_distribution == 'MacOSX' and ansible_distribution_version.major >= 10
+
+
+  - name: installing packer
+  - name: installing fish
+    ansible.builtin.git:
+      repo: 'https://github.com/fish-shell/fish-shell.git'
+      dest: "~/"
+    shell: >
+      cd ~/fish-shell; cmake .; make; sudo make install
+
+  - name: Cloning .dotfiles
+    ansible.builtin.git:
+      repo: 'https://github.com/G33KM44N38/dotfiles'
+      dest: "~/.config"
+      recursive: yes
+      update: yes
+      version: master
+      tags:
+        - dotfiles
+
+  - name: installing neovim
+    ansible.builtin.git:
+      repo: 'https://github.com/neovim/neovim'
+      dest: "~/"
+    shell: >
+      cd ~/neovim && git checkout stable && make CMAKE_BUILD_TYPE=RelWithDebInfo && sudo make install && cd ~/ && rm -rf neovim/
+
+  - name: installing tmux if macos
+    shell: >
+       brew install tmux
+    when: ansible_distribution == 'MacOSX' and ansible_distribution_version.major >= 10
