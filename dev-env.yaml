@@ -46,6 +46,29 @@
       state: present
     when: ansible_distribution == 'MacOSX' and ansible_distribution_version.major >= 10
 
+  - name: Install Rust and Rustc
+    hosts: all
+    tasks:
+      - name: Download Rust installer
+        get_url:
+          url: "https://static.rust-lang.org/rustup/dist/{{ ansible_system | lower }}/{{ ansible_architecture }}/rustup-init"
+          dest: "/tmp/rustup-init"
+          mode: '0755'
+        become: yes
+        when: ansible_system != 'Windows'
+
+      - name: Install Rust on Linux and macOS
+        command: "/tmp/rustup-init -y"
+        args:
+          creates: "/usr/local/bin/rustc"
+        become: yes
+        when: ansible_system != 'Windows'
+
+      - name: Install Rust on Windows
+        win_shell: "C:/Users/{{ ansible_user }}/AppData/Local/Temp/rustup-init.exe /S"
+        args:
+          creates: "C:/Program Files/Rust/bin/rustc.exe"
+        when: ansible_system == 'Windows'
 
   - name: installing fish
     ansible.builtin.git:
