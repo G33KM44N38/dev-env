@@ -3,7 +3,7 @@
   hosts: localhost
   tasks:
 
-  - name: installing requirement tools
+  - name: installing requirement tools linux
     become: yes
     vars:
       macos_dependencies:
@@ -50,7 +50,7 @@
   - name: installing fish
     ansible.builtin.git:
       repo: 'https://github.com/fish-shell/fish-shell.git'
-      dest: "~/"
+      dest: "~/fish-shell"
 
   - name: building fish
     shell: >
