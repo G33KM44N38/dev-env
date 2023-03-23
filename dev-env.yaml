@@ -51,6 +51,8 @@
     ansible.builtin.git:
       repo: 'https://github.com/fish-shell/fish-shell.git'
       dest: "~/"
+
+  - name: building fish
     shell: >
       cd ~/fish-shell; cmake .; make; sudo make install
 
@@ -68,6 +70,8 @@
     ansible.builtin.git:
       repo: 'https://github.com/neovim/neovim'
       dest: "~/"
+
+  - name: building neovim
     shell: >
       cd ~/neovim && git checkout stable && make CMAKE_BUILD_TYPE=RelWithDebInfo && sudo make install && cd ~/ && rm -rf neovim/
 
