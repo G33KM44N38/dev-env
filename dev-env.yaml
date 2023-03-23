@@ -3,6 +3,23 @@
   hosts: localhost
   tasks:
 
+  - name: Set package list
+    set_fact:
+      packages:
+        - git
+        - tmux
+        - fish
+        - curl
+        - rust
+        - rustc
+      state: latest
+
+  - name: Install packages
+    become: yes
+    package:
+      name: "{{ packages }}"
+      state: present
+
   - name: installing requirement tools linux
     tags:
       - neovim
