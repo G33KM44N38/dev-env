@@ -68,6 +68,7 @@
       version: master
       tags:
         - dotfiles
+        - neovim
 
   - name: cloning neovim
     ansible.builtin.git:
