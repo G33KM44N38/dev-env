@@ -54,10 +54,14 @@
     ansible.builtin.git:
       repo: 'https://github.com/fish-shell/fish-shell.git'
       dest: "~/fish-shell"
+    tags:
+      - fish
 
   - name: building fish
     shell: >
       cd ~/fish-shell; cmake .; make; sudo make install
+    tags:
+      - fish
 
   - name: Cloning .dotfiles
     ansible.builtin.git:
