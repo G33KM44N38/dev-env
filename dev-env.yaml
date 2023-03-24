@@ -46,6 +46,10 @@
       state: present
     when: ansible_distribution == 'MacOSX' and ansible_distribution_version.major >= 10
 
+  - name: Load FUSE kernel module for Debian-based OS
+    become: yes
+    ansible.builtin.shell: modprobe fuse
+    when: ansible_distribution == 'Ubuntu' or ansible_distribution == 'Debian'
 
   - name: Install bash
     become: yes
