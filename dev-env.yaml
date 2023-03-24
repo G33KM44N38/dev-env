@@ -3,6 +3,12 @@
   hosts: localhost
   tasks:
 
+  - name: Install bash
+    become: yes
+    package:
+      name: bash
+      state: present
+
   - name: check if cargo is installed
     shell: command -v cargo
     register: cargo_exists
