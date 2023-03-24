@@ -89,15 +89,11 @@
     when: ansible_distribution == 'MacOSX' and ansible_distribution_version.major >= 10
 
   - name: Cloning .dotfiles
-    ansible.builtin.git:
-      repo: 'https://github.com/G33KM44N38/dotfiles'
-      dest: "~/.config"
-      recursive: yes
-      update: yes
-      version: main
-      tags:
-        - neovim
-        - dotfiles
+    shell: >
+      git clone https://github.com/G33KM44N38/dotfiles ~/.config/
+    tags:
+      - neovim
+      - dotfiles
 
   - name: cloning neovim
     ansible.builtin.git:
