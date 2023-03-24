@@ -111,7 +111,7 @@
   - name: Download and install latest Neovim
     block:
       - name: Find latest Neovim version
-        shell: curl -s https://api.github.com/repos/neovim/neovim/releases/latest | grep "tag_name" | cut -d : -f 2,3 | tr -d \",' '
+        shell: curl -s https://api.github.com/repos/neovim/neovim/releases/latest | grep "tag_name" | cut -d : -f 2,3 | tr -d '", ' | xargs -I {} echo "Latest version is {}"
         register: latest_neovim_version
 
       - name: Download Neovim
