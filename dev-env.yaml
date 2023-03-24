@@ -137,7 +137,6 @@
           src: "/tmp/nvim/nvim-{{ latest_neovim_version.stdout }}-{{ ansible_system|lower }}{{ '-64' if ansible_architecture == 'x86_64' else '' }}/bin/nvim"
           dest: /usr/local/bin/nvim
           mode: '0755'
-    when: ansible_os_family == 'Darwin' or ansible_os_family == 'Linux' or ansible_os_family == 'MacOSX'
 
   - name: installing tmux if macos
     shell: >
