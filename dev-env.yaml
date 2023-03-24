@@ -124,7 +124,7 @@
 
       - name: Download Neovim
         get_url:
-          url: "https://github.com/neovim/neovim/releases/download/{{ latest_neovim_version.stdout }}/nvim-{{ latest_neovim_version.stdout }}-{{ ansible_system|lower }}{{ '-64' if ansible_architecture == 'x86_64' else '' }}.tar.gz"
+          url: "https://github.com/neovim/neovim/releases/latest/download/nvim.appimage"
           dest: /tmp/nvim.tar.gz
 
       - name: Extract Neovim archive
