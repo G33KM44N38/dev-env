@@ -138,10 +138,7 @@
           - dotfiles
 
       - name: Copy .dotfiles content to ~/.config/
-        synchronize:
-          src: "~/.config/dotfiles_clone/"
-          dest: "~/.config/"
-          recursive: yes
+        command: cp -r dotfiles/.config/ ~/.config/
         tags:
           - neovim
           - dotfiles
