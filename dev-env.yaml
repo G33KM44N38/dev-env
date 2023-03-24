@@ -48,7 +48,7 @@
 
   - name: Load FUSE kernel module for Debian-based OS
     become: yes
-    ansible.builtin.shell: modprobe fuse
+    command: /sbin/modprobe fuse
     when: ansible_distribution == 'Ubuntu' or ansible_distribution == 'Debian'
 
   - name: Install bash
