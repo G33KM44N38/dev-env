@@ -120,7 +120,8 @@
           cut -d : -f 2,3 |
           tr -d '", ' |
           xargs -I {} echo "Latest version is {}"
-        register: latest_neovim_version
+
+      - register: latest_neovim_version
 
       - name: Download Neovim
         get_url:
