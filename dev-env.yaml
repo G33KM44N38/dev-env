@@ -93,8 +93,12 @@
       - fish
 
   - name: Cloning .dotfiles
-    shell: >
-      git clone https://github.com/G33KM44N38/dotfiles ~/.config/
+    git:
+      repo: "https://github.com/G33KM44N38/dotfiles"
+      dest: " ~/.config/"
+      update: yes
+      clone: no
+      force: yes
     tags:
       - neovim
       - dotfiles
