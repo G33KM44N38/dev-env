@@ -3,6 +3,34 @@
   hosts: localhost
   tasks:
 
+  - name: Install unzip for Debian-based OS
+    become: yes
+    apt:
+      name: unzip
+      state: present
+    when: ansible_distribution == 'Ubuntu' or ansible_distribution == 'Debian'
+
+  - name: Install unzip for macOS
+    become: yes
+    homebrew:
+      name: unzip
+      state: present
+    when: ansible_distribution == 'MacOSX' and ansible_distribution_version.major >= 10
+
+  - name: Install tar for Debian-based OS
+    become: yes
+    apt:
+      name: tar
+      state: present
+    when: ansible_distribution == 'Ubuntu' or ansible_distribution == 'Debian'
+
+  - name: Install tar for macOS
+    become: yes
+    homebrew:
+      name: tar
+      state: present
+    when: ansible_distribution == 'MacOSX' and ansible_distribution_version.major >= 10
+
   - name: Install bash
     become: yes
     package:
