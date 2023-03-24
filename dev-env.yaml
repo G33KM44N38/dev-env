@@ -174,9 +174,20 @@
 
         register: latest_neovim_version
 
-      - name: Download and set executable permission for Neovim AppImage
+      - name: Download Neovim AppImage
         get_url:
           url: "https://github.com/neovim/neovim/releases/latest/download/nvim.appimage"
+          dest: /tmp/nvim.appimage
+          mode: '0755'
+      - name: Extract Neovim AppImage
+        command: /tmp/nvim.appimage --appimage-extract
+        args:
+          chdir: /tmp/
+        become: yes
+      - name: Copy Neovim binary to /usr/local/bin/
+        become: yes
+        copy:
+          src: /tmp/squashfs-root/usr/bin/nvim
           dest: /usr/local/bin/nvim
           mode: '0755'
 
