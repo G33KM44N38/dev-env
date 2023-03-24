@@ -80,6 +80,8 @@
       name: fish
       state: present
     when: ansible_distribution == 'Ubuntu' or ansible_distribution == 'Debian'
+    tags:
+      - fish
 
   - name: install fish for macOS
     become: yes
@@ -87,6 +89,8 @@
       name: fish
       state: present
     when: ansible_distribution == 'MacOSX' and ansible_distribution_version.major >= 10
+    tags:
+      - fish
 
   - name: Cloning .dotfiles
     shell: >
