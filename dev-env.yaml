@@ -132,28 +132,10 @@
       dest: "~/.config/"
       update: yes
       clone: yes
-      depth: 1
       force: yes
-      tags:
-          - neovim
-          - dotfiles
-
-      - name: Copy .dotfiles content to ~/.config/
-        command: cp -r dotfiles/.config/ ~/.config/
-        tags:
-          - neovim
-          - dotfiles
-
-      - name: Remove .dotfiles clone
-        ansible.builtin.file:
-          path: "~/.config/dotfiles_clone"
-          state: absent
-        tags:
-          - neovim
-          - dotfiles
     tags:
-      - neovim
-      - dotfiles
+        - neovim
+        - dotfiles
 
   - name: installing vim-plug
     script: install_vim_plug.sh
