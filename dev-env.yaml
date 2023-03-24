@@ -124,8 +124,8 @@
 
       - name: Download Neovim
         get_url:
-          url: "https://github.com/neovim/neovim/releases/latest/download/nvim-macos.tar.gz"
-          dest: /tmp/nvim.tar.gz
+        url: "https://github.com/neovim/neovim/releases/latest/download/nvim-macos.tar.gz"
+        dest: /tmp/nvim.tar.gz
 
       - name: Extract Neovim archive
         unarchive:
