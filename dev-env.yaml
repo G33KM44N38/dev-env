@@ -74,19 +74,19 @@
       state: present
     when: ansible_distribution == 'MacOSX' and ansible_distribution_version.major >= 10
 
+  - name: install fish for Debian-based OS
+    become: yes
+    apt:
+      name: fish
+      state: present
+    when: ansible_distribution == 'Ubuntu' or ansible_distribution == 'Debian'
 
-  - name: installing fish
-    ansible.builtin.git:
-      repo: 'https://github.com/fish-shell/fish-shell.git'
-      dest: "~/fish-shell"
-    tags:
-      - fish
-
-  - name: building fish
-    shell: >
-      cd ~/fish-shell; cmake .; make; sudo make install
-    tags:
-      - fish
+  - name: install fish for macOS
+    become: yes
+    homebrew:
+      name: fish
+      state: present
+    when: ansible_distribution == 'MacOSX' and ansible_distribution_version.major >= 10
 
   - name: Cloning .dotfiles
     ansible.builtin.git:
