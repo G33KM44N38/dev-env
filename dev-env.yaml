@@ -118,9 +118,13 @@
   - name: Installation de Neovim
     vars:
       neovim_install_cmd_macos: >
-        cd ~/neovim && git checkout stable && make CMAKE_BUILD_TYPE=RelWithDebInfo && sudo make install && cd ~/ && rm -rf neovim
+        curl -LO https://github.com/neovim/neovim/releases/download/nightly/nvim-macos.tar.gz
+        tar xzf nvim-macos.tar.gz
+        ./nvim-macos/bin/nvim
       neovim_install_cmd_linux: >
-        curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim.appimage && chmod u+x nvim.appimage && ./nvim.appimage
+        curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim.appimage
+        chmod u+x nvim.appimage
+        ./nvim.appimage
     shell: "{{ neovim_install_cmd_macos if ansible_os_family == 'Darwin' else neovim_install_cmd_linux }}"
     environment:
       PIP_REQUIRE_VIRTUALENV: "no"
