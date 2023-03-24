@@ -126,14 +126,15 @@
     tags:
       - fish
 
-  - name: Manage .dotfiles
-    block:
-      - name: Cloning .dotfiles
-        git:
-          repo: "https://github.com/G33KM44N38/dotfiles"
-          dest: "~/.config/dotfiles_clone"
-          update: yes
-        tags:
+  - name: Cloning .dotfiles
+    git:
+      repo: "https://github.com/G33KM44N38/dotfiles"
+      dest: "~/.config/"
+      update: yes
+      clone: yes
+      depth: 1
+      force: yes
+      tags:
           - neovim
           - dotfiles
 
