@@ -171,7 +171,22 @@
           dest: /usr/local/bin/nvim
           mode: '0755'
 
-  - name: installing tmux if macos
-    shell: >
-       brew install tmux
-    when: ansible_distribution == 'MacOSX' and ansible_distribution_version.major >= 10
+  - name: Install tmux on Unix systems
+    become: yes
+    vars:
+      macos_packages:
+        - tmux
+      ubuntu_packages:
+        - tmux
+    block:
+      - name: Install tmux on MacOS
+        homebrew:
+          name: "{{ macos_packages }}"
+          state: present
+        when: ansible_distribution == 'MacOSX' and ansible_distribution_version.major >= 10
+      - name: Install tmux on Linux
+        apt:
+          name: "{{ ubuntu_packages }}"
+          state: present
+        when: ansible_distribution == 'Ubuntu' or ansible_distribution == 'Debian'
+
