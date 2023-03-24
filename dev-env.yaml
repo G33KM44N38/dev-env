@@ -103,37 +103,33 @@
       - neovim
       - dotfiles
 
-  - name: cloning neovim
-    ansible.builtin.git:
-      repo: 'https://github.com/neovim/neovim'
-      dest: "~/neovim"
-    tags:
-      - neovim
-
   - name: installing vim-plug
     shell: >
       sh -c 'curl -fLo "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.vim --create-dirs \
       https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
 
-  - name: Installation de Neovim
-    vars:
-      neovim_install_cmd_macos: >
-        curl -LO https://github.com/neovim/neovim/releases/download/nightly/nvim-macos.tar.gz
-        tar xzf nvim-macos.tar.gz
-        ./nvim-macos/bin/nvim
-      neovim_install_cmd_linux: >
-        curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim.appimage
-        chmod u+x nvim.appimage
-        ./nvim.appimage
-    shell: "{{ neovim_install_cmd_macos if ansible_os_family == 'Darwin' else neovim_install_cmd_linux }}"
-    environment:
-      PIP_REQUIRE_VIRTUALENV: "no"
-    args:
-      warn: false
-    tags:
-      - neovim
-    become: true
-    become_method: sudo
+  - name: Download and install latest Neovim
+    block:
+      - name: Find latest Neovim version
+        shell: curl -s https://api.github.com/repos/neovim/neovim/releases/latest | grep "tag_name" | cut -d : -f 2,3 | tr -d \",' '
+        register: latest_neovim_version
+
+      - name: Download Neovim
+        get_url:
+          url: "https://github.com/neovim/neovim/releases/download/{{ latest_neovim_version.stdout }}/nvim-{{ latest_neovim_version.stdout }}-{{ ansible_system|lower }}{{ '-64' if ansible_architecture == 'x86_64' else '' }}.tar.gz"
+          dest: /tmp/nvim.tar.gz
+
+      - name: Extract Neovim archive
+        unarchive:
+          src: /tmp/nvim.tar.gz
+          dest: /tmp/nvim
+
+      - name: Copy Neovim binary to /usr/local/bin/
+        copy:
+          src: "/tmp/nvim/nvim-{{ latest_neovim_version.stdout }}-{{ ansible_system|lower }}{{ '-64' if ansible_architecture == 'x86_64' else '' }}/bin/nvim"
+          dest: /usr/local/bin/nvim
+          mode: '0755'
+    when: ansible_os_family == 'Darwin' or ansible_os_family == 'Linux'
 
   - name: installing tmux if macos
     shell: >
