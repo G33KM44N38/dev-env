@@ -154,15 +154,11 @@
 
         register: latest_neovim_version
 
-      - name: Download Neovim
+      - name: Download and set executable permission for Neovim AppImage
         get_url:
           url: "https://github.com/neovim/neovim/releases/latest/download/nvim.appimage"
-          dest: /tmp/nvim.tar.gz
-
-      - name: Extract Neovim archive
-        unarchive:
-          src: /tmp/nvim.tar.gz
-          dest: /tmp/nvim
+          dest: /usr/local/bin/nvim
+          mode: '0755'
 
       - name: Copy Neovim binary to /usr/local/bin/
         copy:
