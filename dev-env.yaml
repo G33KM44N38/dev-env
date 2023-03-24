@@ -190,3 +190,10 @@
           state: present
         when: ansible_distribution == 'Ubuntu' or ansible_distribution == 'Debian'
 
+  - name: Install Packer
+    git:
+      repo: "https://github.com/wbthomason/packer.nvim"
+      dest: "{{ lookup('env', 'LOCALAPPDATA') }}/nvim-data/site/pack/packer/start/packer.nvim"
+      force: yes
+    when: ansible_os_family == 'Darwin' or ansible_os_family == 'Linux'
+
