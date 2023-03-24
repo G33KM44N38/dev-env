@@ -112,6 +112,7 @@
     tags:
       - neovim
     block:
+
       - name: Find latest Neovim version
         shell: >
           curl -s https://api.github.com/repos/neovim/neovim/releases/latest |
@@ -120,23 +121,23 @@
           tr -d '", ' |
           xargs -I {} echo "Latest version is {}"
 
-        register: latest_neovim_version
+      - register: latest_neovim_version
 
       - name: Download Neovim
         get_url:
-          url: "https://github.com/neovim/neovim/releases/latest/download/nvim.appimage"
-          dest: /tmp/nvim.tar.gz
+        url: "https://github.com/neovim/neovim/releases/latest/download/nvim-macos.tar.gz"
+        dest: /tmp/nvim.tar.gz
 
       - name: Extract Neovim archive
         unarchive:
-          src: /tmp/nvim.tar.gz
-          dest: /tmp/nvim
+        src: /tmp/nvim.tar.gz
+        dest: /tmp/nvim
 
       - name: Copy Neovim binary to /usr/local/bin/
         copy:
-          src: "/tmp/nvim/nvim-{{ latest_neovim_version.stdout }}-{{ ansible_system|lower }}{{ '-64' if ansible_architecture == 'x86_64' else '' }}/bin/nvim"
-          dest: /usr/local/bin/nvim
-          mode: '0755'
+        src: "/tmp/nvim/nvim-{{ latest_neovim_version.stdout }}/bin/nvim"
+        dest: /usr/local/bin/nvim
+        mode: '0755'
 
   - name: installing tmux if macos
     shell: >
