@@ -31,6 +31,22 @@
       state: present
     when: ansible_distribution == 'MacOSX' and ansible_distribution_version.major >= 10
 
+  - name: Install FUSE for Debian-based OS
+    become: yes
+    apt:
+      name:
+        - fuse
+      state: present
+    when: ansible_distribution == 'Ubuntu' or ansible_distribution == 'Debian'
+
+  - name: Install FUSE for macOS
+    become: yes
+    homebrew:
+      name: macfuse
+      state: present
+    when: ansible_distribution == 'MacOSX' and ansible_distribution_version.major >= 10
+
+
   - name: Install bash
     become: yes
     package:
