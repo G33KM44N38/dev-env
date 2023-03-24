@@ -160,12 +160,6 @@
           dest: /usr/local/bin/nvim
           mode: '0755'
 
-      - name: Copy Neovim binary to /usr/local/bin/
-        copy:
-          src: "/tmp/nvim/nvim-{{ latest_neovim_version.stdout }}-{{ ansible_system|lower }}{{ '-64' if ansible_architecture == 'x86_64' else '' }}/bin/nvim"
-          dest: /usr/local/bin/nvim
-          mode: '0755'
-
   - name: installing tmux if macos
     shell: >
        brew install tmux
