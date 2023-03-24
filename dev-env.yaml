@@ -126,13 +126,33 @@
     tags:
       - fish
 
-  - name: Cloning .dotfiles
-    git:
-      repo: "https://github.com/G33KM44N38/dotfiles"
-      dest: " ~/.config/"
-      update: yes
-      clone: no
-      force: yes
+  - name: Manage .dotfiles
+    block:
+      - name: Cloning .dotfiles
+        git:
+          repo: "https://github.com/G33KM44N38/dotfiles"
+          dest: "~/.config/dotfiles_clone"
+          update: yes
+        tags:
+          - neovim
+          - dotfiles
+
+      - name: Copy .dotfiles content to ~/.config/
+        synchronize:
+          src: "~/.config/dotfiles_clone/"
+          dest: "~/.config/"
+          recursive: yes
+        tags:
+          - neovim
+          - dotfiles
+
+      - name: Remove .dotfiles clone
+        ansible.builtin.file:
+          path: "~/.config/dotfiles_clone"
+          state: absent
+        tags:
+          - neovim
+          - dotfiles
     tags:
       - neovim
       - dotfiles
