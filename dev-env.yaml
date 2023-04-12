@@ -12,7 +12,7 @@
 
   - name: Install unzip for macOS
     become: yes
-    homebrew:
+   homebrew:
       name: unzip
       state: present
     when: ansible_distribution == 'MacOSX' and ansible_distribution_version.major >= 10
@@ -148,6 +148,7 @@
         shell: >
           sudo apt-get update
           sudo apt-get install ninja-build gettext cmake unzip curl
+        when: ansible_distribution == 'Ubuntu' or ansible_distribution == 'Debian'
 
 
       - name: Building Neovim 
@@ -155,12 +156,12 @@
           git clone https://github.com/neovim/neovim \
           cd neovim && make CMAKE_BUILD_TYPE=RelWithDebInfo \
           sudo make install
-    when: ansible_distribution == 'Ubuntu' or ansible_distribution == 'Debian'
+        when: ansible_distribution == 'Ubuntu' or ansible_distribution == 'Debian'
 
-    block:
       - name: Install the requirement for macos
         shell: >
           brew install ninja cmake gettext curl
+        when: ansible_distribution == 'MacOSX' and ansible_distribution_version.major >= 10
       - name: install the latest version of neovim on macos
         shell: >
           git clone https://github.com/neovim/neovim \
