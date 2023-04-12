@@ -176,17 +176,17 @@
         - tmux
       ubuntu_packages:
         - tmux
-    block:
-      - name: Install tmux on MacOS
-        homebrew:
-          name: "{{ macos_packages }}"
-          state: present
-        when: ansible_distribution == 'MacOSX' and ansible_distribution_version.major >= 10
-      - name: Install tmux on Linux
-        apt:
-          name: "{{ ubuntu_packages }}"
-          state: present
-        when: ansible_distribution == 'Ubuntu' or ansible_distribution == 'Debian'
+  block:
+    - name: Install tmux on MacOS
+      homebrew:
+        name: "{{ macos_packages }}"
+        state: present
+      when: ansible_distribution == 'MacOSX' and ansible_distribution_version.major >= 10
+    - name: Install tmux on Linux
+      apt:
+        name: "{{ ubuntu_packages }}"
+        state: present
+      when: ansible_distribution == 'Ubuntu' or ansible_distribution == 'Debian'
 
   - name: Install Packer
     git:
