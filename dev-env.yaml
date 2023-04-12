@@ -144,32 +144,30 @@
     tags:
       - neovim
     block:
-      - name: Find latest Neovim version
+      - name: Install the requirement for neovim
         shell: >
-          curl -s https://api.github.com/repos/neovim/neovim/releases/latest |
-          grep "tag_name" |
-          cut -d : -f 2,3 |
-          tr -d '", ' |
-          xargs -I {} echo "Latest version is {}"
+          sudo apt-get update
+          sudo apt-get install ninja-build gettext cmake unzip curl
 
-        register: latest_neovim_version
 
-      - name: Download Neovim AppImage
-        get_url:
-          url: "https://github.com/neovim/neovim/releases/latest/download/nvim.appimage"
-          dest: /tmp/nvim.appimage
-          mode: '0755'
-      - name: Extract Neovim AppImage
-        command: /tmp/nvim.appimage --appimage-extract
-        args:
-          chdir: /tmp/
-        become: yes
-      - name: Copy Neovim binary to /usr/local/bin/
-        become: yes
-        copy:
-          src: /tmp/squashfs-root/usr/bin/nvim
-          dest: /usr/local/bin/nvim
-          mode: '0755'
+      - name: Building Neovim 
+        shell: >
+          git clone https://github.com/neovim/neovim \
+          cd neovim && make CMAKE_BUILD_TYPE=RelWithDebInfo \
+          sudo make install
+    when: ansible_distribution == 'Ubuntu' or ansible_distribution == 'Debian'
+
+    block:
+      - name: Install the requirement for macos
+        shell: >
+          brew install ninja cmake gettext curl
+      - name: install the latest version of neovim on macos
+        shell: >
+          git clone https://github.com/neovim/neovim \
+          cd neovim && make CMAKE_BUILD_TYPE=RelWithDebInfo \
+          git checkout stable \
+          sudo make install
+        when: ansible_distribution == 'MacOSX' and ansible_distribution_version.major >= 10
 
   - name: Install tmux on Unix systems
     become: yes
@@ -196,4 +194,21 @@
       dest: "{{ lookup('env', 'LOCALAPPDATA') }}/nvim-data/site/pack/packer/start/packer.nvim"
       force: yes
     when: ansible_os_family == 'Darwin' or ansible_os_family == 'Linux'
+
+
+    block:
+      - name: Install npm on linux
+        shell: >
+          sudo apt-get update
+          sudo apt-get install nodejs npm
+        when: ansible_distribution == 'Ubuntu' or ansible_distribution == 'Debian'
+      - name: Install npm on macos
+        shell: >
+          sudo apt-get update
+          sudo apt-get install nodejs npm
+          shell: >
+            /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)" \
+            brew update \
+            brew install npm
+        when: ansible_distribution == 'MacOSX' and ansible_distribution_version.major >= 10
 
