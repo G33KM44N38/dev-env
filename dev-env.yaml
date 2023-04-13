@@ -113,6 +113,8 @@
     become: yes
     tags:
       - neovim
+    args:
+      warn: false
     block:
       - name: Install the requirement for neovim linux
         shell: >
