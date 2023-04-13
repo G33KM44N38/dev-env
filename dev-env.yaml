@@ -110,6 +110,7 @@
         - dotfiles
 
   - name: Download and install latest Neovim
+    become: yes
     tags:
       - neovim
     block:
