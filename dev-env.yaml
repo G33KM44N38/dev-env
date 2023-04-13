@@ -116,18 +116,14 @@
     block:
       - name: Install the requirement for neovim linux
         shell: >
-          apt-get update &&\
+          apt-get update && \
           apt-get install ninja-build gettext cmake unzip curl
-        args:
-          warn: false
-          ansible_shell_executable: /bin/bash
-
         when: ansible_distribution == 'Ubuntu' or ansible_distribution == 'Debian'
       - name: Building Neovim Linux
         shell: >
-          git clone https://github.com/neovim/neovim \
-          cd neovim && make CMAKE_BUILD_TYPE=RelWithDebInfo \
-          git checkout stable \
+          git clone https://github.com/neovim/neovim && \
+          cd neovim && make CMAKE_BUILD_TYPE=RelWithDebInfo && \
+          git checkout stable && \
           make install
         when: ansible_distribution == 'Ubuntu' or ansible_distribution == 'Debian'
 
@@ -137,9 +133,9 @@
         when: ansible_distribution == 'MacOSX' and ansible_distribution_version.major >= 10
       - name: install the latest version of neovim on macos
         shell: >
-          git clone https://github.com/neovim/neovim \
-          cd neovim && make CMAKE_BUILD_TYPE=RelWithDebInfo \
-          git checkout stable \
+          git clone https://github.com/neovim/neovim && \
+          cd neovim && make CMAKE_BUILD_TYPE=RelWithDebInfo && \
+          git checkout stable && \
           sudo make install
         when: ansible_distribution == 'MacOSX' and ansible_distribution_version.major >= 10
 
