@@ -116,15 +116,15 @@
     block:
       - name: Install the requirement for neovim linux
         shell: >
-          sudo apt-get update
-          sudo apt-get install ninja-build gettext cmake unzip curl
+          apt-get update \
+          apt-get install ninja-build gettext cmake unzip curl
         when: ansible_distribution == 'Ubuntu' or ansible_distribution == 'Debian'
       - name: Building Neovim Linux
         shell: >
           git clone https://github.com/neovim/neovim \
           cd neovim && make CMAKE_BUILD_TYPE=RelWithDebInfo \
           git checkout stable \
-          sudo make install
+          make install
         when: ansible_distribution == 'Ubuntu' or ansible_distribution == 'Debian'
 
       - name: Install the requirement for nvim macos
