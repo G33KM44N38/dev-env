@@ -3,34 +3,6 @@
   hosts: localhost
   tasks:
 
-  - name: Install unzip for Debian-based OS
-    become: yes
-    apt:
-      name: unzip
-      state: present
-    when: ansible_distribution == 'Ubuntu' or ansible_distribution == 'Debian'
-
-  - name: Install unzip for macOS
-    become: yes
-   homebrew:
-      name: unzip
-      state: present
-    when: ansible_distribution == 'MacOSX' and ansible_distribution_version.major >= 10
-
-  - name: Install tar for Debian-based OS
-    become: yes
-    apt:
-      name: tar
-      state: present
-    when: ansible_distribution == 'Ubuntu' or ansible_distribution == 'Debian'
-
-  - name: Install tar for macOS
-    become: yes
-    homebrew:
-      name: tar
-      state: present
-    when: ansible_distribution == 'MacOSX' and ansible_distribution_version.major >= 10
-
   - name: Install bash
     become: yes
     package:
@@ -137,28 +109,24 @@
         - neovim
         - dotfiles
 
-  - name: installing vim-plug
-    script: install_vim_plug.sh
-
   - name: Download and install latest Neovim
     tags:
       - neovim
     block:
-      - name: Install the requirement for neovim
+      - name: Install the requirement for neovim linux
         shell: >
           sudo apt-get update
           sudo apt-get install ninja-build gettext cmake unzip curl
         when: ansible_distribution == 'Ubuntu' or ansible_distribution == 'Debian'
-
-
-      - name: Building Neovim 
+      - name: Building Neovim Linux
         shell: >
           git clone https://github.com/neovim/neovim \
           cd neovim && make CMAKE_BUILD_TYPE=RelWithDebInfo \
+          git checkout stable \
           sudo make install
         when: ansible_distribution == 'Ubuntu' or ansible_distribution == 'Debian'
 
-      - name: Install the requirement for macos
+      - name: Install the requirement for nvim macos
         shell: >
           brew install ninja cmake gettext curl
         when: ansible_distribution == 'MacOSX' and ansible_distribution_version.major >= 10
@@ -170,24 +138,24 @@
           sudo make install
         when: ansible_distribution == 'MacOSX' and ansible_distribution_version.major >= 10
 
-  - name: Install tmux on Unix systems
+  - name: installing tmux
     become: yes
     vars:
       macos_packages:
         - tmux
       ubuntu_packages:
         - tmux
-  block:
-    - name: Install tmux on MacOS
-      homebrew:
-        name: "{{ macos_packages }}"
-        state: present
-      when: ansible_distribution == 'MacOSX' and ansible_distribution_version.major >= 10
-    - name: Install tmux on Linux
-      apt:
-        name: "{{ ubuntu_packages }}"
-        state: present
-      when: ansible_distribution == 'Ubuntu' or ansible_distribution == 'Debian'
+    block:
+      - name: Install tmux on MacOS
+        homebrew:
+          name: "{{ macos_packages }}"
+          state: present
+        when: ansible_distribution == 'MacOSX' and ansible_distribution_version.major >= 10
+      - name: Install tmux on Linux
+        apt:
+          name: "{{ ubuntu_packages }}"
+          state: present
+        when: ansible_distribution == 'Ubuntu' or ansible_distribution == 'Debian'
 
   - name: Install Packer
     git:
@@ -196,7 +164,7 @@
       force: yes
     when: ansible_os_family == 'Darwin' or ansible_os_family == 'Linux'
 
-
+  - name: install NPM
     block:
       - name: Install npm on linux
         shell: >
@@ -205,11 +173,8 @@
         when: ansible_distribution == 'Ubuntu' or ansible_distribution == 'Debian'
       - name: Install npm on macos
         shell: >
-          sudo apt-get update
-          sudo apt-get install nodejs npm
-          shell: >
-            /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)" \
-            brew update \
-            brew install npm
+          /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)" \
+          brew update \
+          brew install npm
         when: ansible_distribution == 'MacOSX' and ansible_distribution_version.major >= 10
 
