@@ -120,6 +120,8 @@
           apt-get install ninja-build gettext cmake unzip curl
         args:
           warn: false
+          ansible_shell_executable: /bin/bash
+
         when: ansible_distribution == 'Ubuntu' or ansible_distribution == 'Debian'
       - name: Building Neovim Linux
         shell: >
