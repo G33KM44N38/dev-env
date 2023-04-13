@@ -116,7 +116,7 @@
     block:
       - name: Install the requirement for neovim linux
         shell: >
-          apt-get update \
+          apt-get update &&\
           apt-get install ninja-build gettext cmake unzip curl
         args:
           warn: false
